@@ -6,7 +6,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-parcelize'
 
-// ОТКЛЮЧЕНО: Внешний файл подписи не нужен для сборки unsigned APK
+// ОТКЛЮЧЕНО: Внешний файл подписи не нужен для сборки unsigned APK в CI
 // apply from: '../signing.gradle'
 
 //#ifdef NONFREE
@@ -26,16 +26,18 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     namespace 'me.zhanghai.android.files'
-    buildToolsVersion = '35.0.0'
-    compileSdk = 35
-    // compileSdkMinor удален, так как он вызывает ошибку для API < 36
+    // Возвращаем оригинальные значения автора (они валидны, т.к. 37 >= 36)
+    buildToolsVersion = '37.0.0'
+    compileSdk = 37
+    compileSdkMinor = 2
     ndkVersion '30.0.16248370'
     
     defaultConfig {
         applicationId 'me.zhanghai.android.files'
         minSdk 23
         // Not supporting the ACCESS_LOCAL_NETWORK runtime permission yet.
-        targetSdk 35
+        //noinspection OldTargetApi
+        targetSdk 36
         versionCode 40
         versionName '1.7.5'
         resValue 'string', 'app_version', versionName + ' (' + versionCode + ')'
@@ -78,7 +80,7 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             
-            // Явно указываем null, чтобы Gradle создал неподписанный (unsigned) APK
+            // ИЗМЕНЕНО: Явно указываем null, чтобы Gradle создал неподписанный (unsigned) APK
             signingConfig null 
             
 //#ifdef NONFREE
