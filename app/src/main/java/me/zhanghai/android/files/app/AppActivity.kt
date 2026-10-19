@@ -26,11 +26,15 @@ abstract class AppActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        CustomThemeHelper.apply(this)
+        // Инициализируем глобальный перехватчик крашей (только один раз)
+        if (Thread.getDefaultUncaughtExceptionHandler() !is CrashHandler) {
+            CrashHandler.init(this)
+        }
 
+        CustomThemeHelper.apply(this)
         super.onCreate(savedInstanceState)
         
-        // Добавляем флаг защиты от скриншотов, записи экрана и отображения в меню недавних приложений
+        // Защита от скриншотов
         window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
 
