@@ -6,6 +6,7 @@
 package me.zhanghai.android.files.app
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import me.zhanghai.android.files.theme.custom.CustomThemeHelper
@@ -28,6 +29,9 @@ abstract class AppActivity : AppCompatActivity() {
         CustomThemeHelper.apply(this)
 
         super.onCreate(savedInstanceState)
+        
+        // Добавляем флаг защиты от скриншотов, записи экрана и отображения в меню недавних приложений
+        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
 
     override fun onSupportNavigateUp(): Boolean {
