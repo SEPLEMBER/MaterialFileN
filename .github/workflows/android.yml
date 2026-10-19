@@ -18,14 +18,15 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
-    - name: Build F-Droid Release APK
-      # Собираем только flavor 'fdroid' для релизной конфигурации
-      run: ./gradlew assembleFdroidRelease
+    - name: Build Release APK
+      # Собираем стандартный релиз без flavor'ов
+      run: ./gradlew assembleRelease
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: app-fdroid-release-unsigned
-        # Путь к APK для конкретного flavor находится в подпапке fdroid
-        path: app/build/outputs/apk/fdroid/release/*.apk
+        name: app-release-unsigned
+        # Путь к релизному APK без flavor'ов
+        path: app/build/outputs/apk/release/*.apk
         retention-days: 2
+        if-no-files-found: error
