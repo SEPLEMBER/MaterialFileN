@@ -6,7 +6,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-parcelize'
 
-apply from: '../signing.gradle'
+// ОТКЛЮЧЕНО ДЛЯ CI: Внешний файл подписи не нужен, мы собираем unsigned APK
+// apply from: '../signing.gradle'
 
 //#ifdef NONFREE
 buildscript {
@@ -25,8 +26,8 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     namespace 'me.zhanghai.android.files'
-    buildToolsVersion = '37.0.0'
-    compileSdk = 37
+    buildToolsVersion = '35.0.0' // Примечание: 37.0.0 может вызвать ошибку, если у вас нет превью SDK. Если 37 работает у вас локально, верните '37.0.0'
+    compileSdk = 35 // Аналогично, проверьте, поддерживает ли ваш CI compileSdk 37. Обычно это 34 или 35.
     compileSdkMinor = 2
     ndkVersion '30.0.16248370'
     defaultConfig {
@@ -76,7 +77,10 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            
+            // ИЗМЕНЕНО: Явно указываем null, чтобы Gradle создал неподписанный APK (unsigned)
+            signingConfig null 
+            
 //#ifdef NONFREE
             firebaseCrashlytics {
                 nativeSymbolUploadEnabled true
@@ -108,6 +112,7 @@ repositories {
         url 'https://jitpack.io'
     }
 }
+
 dependencies {
     // We need
     // https://github.com/bitfireAT/dav4jvm/commit/c1bc14348831bcdb00f3a6eec4859b81c7dc3728 , but we
