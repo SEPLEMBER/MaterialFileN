@@ -1264,7 +1264,8 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
             FileJobService.open(path, mimeType, withChooser, requireContext())
         } else {
             val intent = path.fileProviderUri.createViewIntent(mimeType)
-                .addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                // ИСПРАВЛЕНО: Добавляем флаг на ЧТЕНИЕ вместе с флагом на запись
+                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
                 .apply {
                     extraPath = path
                     maybeAddImageViewerActivityExtras(this, path, mimeType)
