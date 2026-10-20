@@ -37,7 +37,8 @@ class OpenFileActivity : AppActivity() {
             FileJobService.open(path, mimeType, false, this)
         } else {
             val intent = path.fileProviderUri.createViewIntent(mimeType)
-                .addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                // ИСПРАВЛЕНО: Добавляем флаг на ЧТЕНИЕ (и оставляем на запись для совместимости)
+                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
                 .apply { extraPath = path }
             startActivitySafe(intent)
         }
