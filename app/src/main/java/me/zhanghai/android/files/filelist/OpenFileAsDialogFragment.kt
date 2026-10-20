@@ -41,7 +41,8 @@ class OpenFileAsDialogFragment : AppCompatDialogFragment() {
 
     private fun openAs(mimeType: MimeType) {
         val intent = args.path.fileProviderUri.createViewIntent(mimeType)
-            .addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            // ИСПРАВЛЕНО: Добавляем флаг на ЧТЕНИЕ вместе с флагом на запись
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
             .apply { extraPath = args.path }
             .withChooser()
         startActivitySafe(intent)
@@ -50,7 +51,6 @@ class OpenFileAsDialogFragment : AppCompatDialogFragment() {
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-
         finish()
     }
 
