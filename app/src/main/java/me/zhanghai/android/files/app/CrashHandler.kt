@@ -22,8 +22,8 @@ object CrashHandler : Thread.UncaughtExceptionHandler {
 
     override fun uncaughtException(t: Thread, e: Throwable) {
         try {
-            // Формируем читаемый отчет об ошибке
-            val stackTrace = android.util.Log.getStackTraceString(e)
+            // Формируем читаемый отчет об ошибке (используем нативный метод Kotlin вместо android.util.Log)
+            val stackTrace = e.stackTraceToString()
             val crashReport = buildString {
                 append("=== MATERIAL FILES CRASH REPORT ===\n")
                 append("Thread: ${t.name}\n")
@@ -46,8 +46,8 @@ object CrashHandler : Thread.UncaughtExceptionHandler {
             ).show()
 
         } catch (reportException: Exception) {
-            // Если даже копирование в буфер упало, выводим это в logcat
-            android.util.Log.e("CrashHandler", "Failed to handle crash", reportException)
+            // Намеренно оставляем пустым, чтобы избежать любой записи в logcat
+            // в соответствии с требованиями безопасности оболочки.
         } finally {
             // Передаем управление стандартному обработчику Android 
             // (он покажет системный диалог "Приложение остановлено" и завершит процесс)
